@@ -32,7 +32,7 @@ public class PantallaJuego implements Pantalla {
     private int velocidadBola = 7;
 
     private File ruta = new File("Imagenes/galaxia.jpg");
-    private String rutaPelota = "Imagenes/pelota.png";
+    private String rutaPelota = "Imagenes/nuevaPelota.png";
     private String rutaBarra = "Imagenes/barra.png";
 
     private long tiempoOriginal;
@@ -61,15 +61,17 @@ public class PantallaJuego implements Pantalla {
     @Override
     public void inicializarPantalla() {
         img = null;
-        int x = -15;
-        int y = -10;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 20; j++) {
-                x += 30;
-                asteroides.add(new Sprite(Color.GREEN, x, y, 20, 10, 0, 0));
+        int x = -30;
+        int y = 10;
+        // Cada 5 niveles se añadira una fila y a cada nivel se le añade uno de
+        // velocidad
+        for (int i = 0; i < (Math.abs(velocidadBola) / 5); i++) {
+            for (int j = 0; j < 9; j++) {
+                x += 60;
+                asteroides.add(new Sprite(Color.GREEN, x, y, 50, 20, 0, 0));
             }
-            y += 20;
-            x = -15;
+            y += 30;
+            x = 15;
         }
         try {
             img = ImageIO.read(ruta);
@@ -77,8 +79,8 @@ public class PantallaJuego implements Pantalla {
             e.printStackTrace();
         }
         tiempoOriginal = System.nanoTime();
-        barra = new Sprite(Color.RED, 100, 300, 50, 20, 0, 0);
-        bola = new Sprite(110, 290, 20, 20, 0, 0, rutaPelota);
+        barra = new Sprite(Color.RED, 100, 310, 50, 10, 0, 0);
+        bola = new Sprite(150, 270, 30, 30, 0, 0, rutaPelota);
     }
 
     /**
@@ -110,7 +112,7 @@ public class PantallaJuego implements Pantalla {
     private void rellenarPuntuacion(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Nivel " + (velocidadBola - 6), 500, 350);
+        g.drawString("Nivel " + (Math.abs(velocidadBola) - 5), 500, 350);
     }
 
     /**
@@ -143,10 +145,6 @@ public class PantallaJuego implements Pantalla {
 
     }
 
-    /**
-     * Comprueba el choque entre dos sprites que le mandemos y devolvera true si
-     * chocan y false si no
-     */
     public boolean comprobarChoque(Sprite sprite1, Sprite sprite2) {
         Sprite cercano, lejano;
         boolean choqueEnX = false;
@@ -208,27 +206,37 @@ public class PantallaJuego implements Pantalla {
         if (bola != null) {
             for (int i = 0; i < asteroides.size(); i++) {
                 if (comprobarChoque(bola, asteroides.get(i))) {
+                    if (bola.getPosX() + bola.getAncho() < asteroides.get(i).getPosX()) {
+                        bola.cambiarTrayectoriaX();
+                    }
+                    if (bola.getPosX() > asteroides.get(i).getPosX() + asteroides.get(i).getAncho())
+                        bola.cambiarTrayectoriaX();
                     asteroides.remove(i);
-                    bola.cambiarTrayectoria();
+
+                    bola.cambiarTrayectoriaY();
                 }
+
             }
         }
         barra.mover(voidIzquierda, voyDerecha);
 
         if (bola != null) {
             if (comprobarChoque(barra, bola)) {
-                bola.cambiarTrayectoria();
+                bola.cambiarTrayectoriaY();
             }
+
             bola.mover(ancho, alto);
             if (bola.getPosY() > alto) {
                 bola = null;
             }
+        } else {
+            panel.setPantallaActual(new PantallaFinal(false, contador, panel));
         }
         if (asteroides.size() > 0) {
             for (int i = 0; i < asteroides.size(); i++) {
                 asteroides.get(i).mover(ancho, alto);
             }
-        } else if (barra != null) {
+        } else if (bola != null) {
             panel.setPantallaActual(new PantallaFinal(true, contador, panel));
         }
 
@@ -242,9 +250,7 @@ public class PantallaJuego implements Pantalla {
     public void hacerClick(MouseEvent e) {
         if (SwingUtilities.isLeftMouseButton(e) && bola != null) {
             bola.setVelX(velocidadBola);
-            bola.setVelY(-velocidadBola);
-        } else {
-
+            bola.setVelY(velocidadBola);
         }
 
     }

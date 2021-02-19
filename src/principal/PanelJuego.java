@@ -27,7 +27,7 @@ public class PanelJuego extends JPanel
 
     private boolean esPantallaInicio = true;
 
-    private int nivel = -10;
+    private int nivel = -5;
 
     // private ArrayList<Sprite> asteroides = new ArrayList<Sprite>();
 
@@ -117,7 +117,7 @@ public class PanelJuego extends JPanel
      * Metodo con el que crearemos un nivel aumentando en 1 la dificultad
      */
     public void nuevoNivel() {
-        nivel++;
+        nivel--;
         pantallaActual = new PantallaJuego(this, nivel);
     }
 

@@ -58,10 +58,9 @@ public class PantallaFinal implements Pantalla {
         if (victoria) {
             fondoFile = "Imagenes/victoria.jpg";
             mensaje = "Victoria!!";
-            mensajeTiempo = "Tu tiempo : " + df.format(tiempo);
         } else {
             fondoFile = "Imagenes/derrota.jpg";
-            mensaje = "Has sido derrotado!";
+            mensaje = "Has perdido!! :(";
         }
 
         img = null;
@@ -86,7 +85,7 @@ public class PantallaFinal implements Pantalla {
         if (victoria) {
             g.setColor(Color.RED);
             g.setFont(new Font("Arial", Font.BOLD, 25));
-            g.drawString(mensajeTiempo, 200, 250);
+
             g.setColor(Color.YELLOW);
             g.setFont(new Font("Arial", Font.BOLD, 60));
             g.drawString(mensaje, 200, 150);
