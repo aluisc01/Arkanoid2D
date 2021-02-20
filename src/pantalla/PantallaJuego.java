@@ -24,6 +24,9 @@ import principal.*;
  */
 public class PantallaJuego implements Pantalla {
 
+    /**
+     * Almacenara todos los bloques
+     */
     private ArrayList<Sprite> bloques = new ArrayList<Sprite>();
 
     private BufferedImage img;
@@ -40,9 +43,18 @@ public class PantallaJuego implements Pantalla {
     private Sprite bola;
     private PanelJuego panel;
 
-    private Color[] colores = { Color.GREEN, Color.BLUE, Color.YELLOW, Color.PINK, Color.ORANGE };
-
+    /**
+     * Colores que cogera cada linea de bloques
+     */
+    private Color[] colores = { Color.GREEN, Color.CYAN, Color.YELLOW, Color.PINK, Color.ORANGE };
+    /**
+     * Booleano , si es true estamos pulsando la d
+     */
     boolean voyDerecha = false;
+
+    /**
+     * Booleano que dice si estamos pulsando la a
+     */
     boolean voidIzquierda = false;
 
     public PantallaJuego(PanelJuego panel, int nivel) {
@@ -61,22 +73,21 @@ public class PantallaJuego implements Pantalla {
         img = null;
         int x = -30;
         int y = 11;
-        // Cada 5 niveles se añadira una fila y a cada nivel se le añade uno de
-        // velocidad
-        for (int i = 0; i < (Math.abs(velocidadBola) / 5); i++) {
+        // Cada 5 niveles se añadira una fila con cada nivel hasta 5 como maximo
+        for (int i = 0; i < Math.min((Math.abs(velocidadBola) - 4), 5); i++) {
             for (int j = 0; j < 9; j++) {
                 x += 60;
                 bloques.add(new Sprite(colores[i], x, y, 50, 20, 0, 0));
             }
             y += 30;
-            x = 15;
+            x = -30;
         }
         try {
             img = ImageIO.read(ruta);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        barra = new Sprite(Color.RED, 100, 310, 50, 10, 0, 0);
+        barra = new Sprite(100, 310, 50, 10, 0, 0, rutaBarra);
         bola = new Sprite(550, 270, 30, 30, 0, 0, rutaPelota);
     }
 
@@ -122,6 +133,14 @@ public class PantallaJuego implements Pantalla {
 
     }
 
+    /**
+     * Comprobamos si dos sprites que le mandemos chocan.
+     * 
+     * @param sprite1
+     * @param sprite2
+     * @return retorna un booleano true si se chocan y false si no se chocan
+     * 
+     */
     public boolean comprobarChoque(Sprite sprite1, Sprite sprite2) {
         Sprite cercano, lejano;
         boolean choqueEnX = false;
@@ -188,33 +207,33 @@ public class PantallaJuego implements Pantalla {
         barra.mover(voidIzquierda, voyDerecha);
 
         if (bola != null) {
-            if (comprobarChoque(barra, bola)) {
+            if (comprobarChoque(barra, bola)) {// Si chocan se cambia la velocidad en Y
                 bola.cambiarTrayectoriaY();
+
             }
 
             bola.mover(ancho, alto);
-            if (bola.getPosY() > alto) {
+            if (bola.getPosY() > alto) {// Si la bola cae abajo perdemos
                 bola = null;
+                panel.setPantallaActual(new PantallaFinal(false, contador, panel));
             }
-        } else {
-            panel.setPantallaActual(new PantallaFinal(false, contador, panel));
         }
+
         if (bloques.size() > 0) {
             for (int i = 0; i < bloques.size(); i++) {
                 bloques.get(i).mover(ancho, alto);
             }
-        } else if (bola != null) {
+        } else if (bola != null) {// Si no hay bloques ganamos
             panel.setPantallaActual(new PantallaFinal(true, contador, panel));
         }
 
     }
 
     /**
-     * Cada vez que hagamos click crearemos un nuevo sprite con el disparo , si en
-     * clickderecho crearemos la nave
+     * Al hacer clip empezaremos a mover la bola
      */
     @Override
-    public void hacerClick(MouseEvent e) {
+    public void hacerClick(MouseEvent e) {// Click para
         if (SwingUtilities.isLeftMouseButton(e) && bola != null && bola.getVelX() == 0) {
             bola.setVelX(velocidadBola);
             bola.setVelY(velocidadBola);
@@ -223,14 +242,17 @@ public class PantallaJuego implements Pantalla {
     }
 
     /**
-     * Cada vez que movamos el raton moveremos la nave y comprobaremos si choca con
-     * algun asteroide
+     * 
      */
     @Override
     public void moverRaton(MouseEvent e) {
 
     }
 
+    /**
+     * Cuando pulsemos la a o la d cambiaremos el booleano para movernos al lado que
+     * corresponda
+     */
     @Override
     public void pulsarTecla(KeyEvent e) {
         char tecla = e.getKeyChar();
@@ -255,6 +277,10 @@ public class PantallaJuego implements Pantalla {
 
     }
 
+    /**
+     * Cuando dejemos de pulsar una tecla cambiaremos los booleanos para dejar de
+     * movernos
+     */
     @Override
     public void soltarTecla() {
         voidIzquierda = false;
