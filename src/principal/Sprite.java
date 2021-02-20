@@ -131,14 +131,11 @@ public class Sprite {
 
     public void cambiarTrayectoriaY() {
         int rd = new Random().nextInt(3);
-        System.out.println(rd);
         if (rd == 1) {
             velY = -(velY + 1);
             velX = velX - 1;
-            System.out.println("SumoY");
         } else if (rd == 2) {
             velY = -(velY - 1);
-            System.out.println("RestoY");
 
         } else {
             velY = -velY;
@@ -148,15 +145,12 @@ public class Sprite {
 
     public void cambiarTrayectoriaX() {
         int rd = new Random().nextInt(3);
-        System.out.println(rd);
         if (rd == 1) {
             velX = -(velX + 1);
             velY = velY - 1;
-            System.out.println("SumoX");
         } else if (rd == 2) {
             velX = -(velX - 1);
             velY = velY + 1;
-            System.out.println("RestoX");
 
         } else {
             velX = -velX;

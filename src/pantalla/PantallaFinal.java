@@ -52,9 +52,6 @@ public class PantallaFinal implements Pantalla {
      */
     @Override
     public void inicializarPantalla() {
-        dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-        df = new DecimalFormat("##.##", dfs);
         if (victoria) {
             fondoFile = "Imagenes/victoria.jpg";
             mensaje = "Victoria!!";
@@ -117,6 +114,9 @@ public class PantallaFinal implements Pantalla {
 
         if (victoria) {
             panel.nuevoNivel();
+        } else {
+            panel.setPantallaActual(new PantallaInicio());
+            panel.setEspantallaInicio(true);
         }
 
     }

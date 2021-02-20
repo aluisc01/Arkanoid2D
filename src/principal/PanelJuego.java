@@ -113,6 +113,10 @@ public class PanelJuego extends JPanel
         this.pantallaActual = pantallaActual;
     }
 
+    public void setEspantallaInicio(boolean inicio) {
+        esPantallaInicio = inicio;
+    }
+
     /**
      * Metodo con el que crearemos un nivel aumentando en 1 la dificultad
      */

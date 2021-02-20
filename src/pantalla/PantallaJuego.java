@@ -23,26 +23,24 @@ import principal.*;
  * @author Alberto Luis Calero
  */
 public class PantallaJuego implements Pantalla {
-    private static final int altoDisparo = 40;
-    private static final int anchoDisparo = 16;
-    private ArrayList<Sprite> asteroides = new ArrayList<Sprite>();
+
+    private ArrayList<Sprite> bloques = new ArrayList<Sprite>();
 
     private BufferedImage img;
     private Image redimension;
     private int velocidadBola = 7;
 
-    private File ruta = new File("Imagenes/galaxia.jpg");
+    private File ruta = new File("Imagenes/fondo.png");
     private String rutaPelota = "Imagenes/nuevaPelota.png";
     private String rutaBarra = "Imagenes/barra.png";
 
-    private long tiempoOriginal;
-    private long tiempoActual;
-    private long tiempoTranscurrido;
     private double contador = 0.;
-    private String cadenaTiempo;
+
     private Sprite barra;
     private Sprite bola;
     private PanelJuego panel;
+
+    private Color[] colores = { Color.GREEN, Color.BLUE, Color.YELLOW, Color.PINK, Color.ORANGE };
 
     boolean voyDerecha = false;
     boolean voidIzquierda = false;
@@ -62,13 +60,13 @@ public class PantallaJuego implements Pantalla {
     public void inicializarPantalla() {
         img = null;
         int x = -30;
-        int y = 10;
+        int y = 11;
         // Cada 5 niveles se añadira una fila y a cada nivel se le añade uno de
         // velocidad
         for (int i = 0; i < (Math.abs(velocidadBola) / 5); i++) {
             for (int j = 0; j < 9; j++) {
                 x += 60;
-                asteroides.add(new Sprite(Color.GREEN, x, y, 50, 20, 0, 0));
+                bloques.add(new Sprite(colores[i], x, y, 50, 20, 0, 0));
             }
             y += 30;
             x = 15;
@@ -78,9 +76,8 @@ public class PantallaJuego implements Pantalla {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        tiempoOriginal = System.nanoTime();
         barra = new Sprite(Color.RED, 100, 310, 50, 10, 0, 0);
-        bola = new Sprite(150, 270, 30, 30, 0, 0, rutaPelota);
+        bola = new Sprite(550, 270, 30, 30, 0, 0, rutaPelota);
     }
 
     /**
@@ -88,19 +85,6 @@ public class PantallaJuego implements Pantalla {
      */
     private void rellenarFondo(Graphics g) {
         g.drawImage(redimension, 0, 0, null);
-
-    }
-
-    /**
-     * Metodo con el que escribiremos el tiempo que se lleva
-     * 
-     * @param g
-     */
-    private void rellenarTexto(Graphics g) {
-        g.setColor(Color.WHITE);
-        cadenaTiempo = calcularCadenaTiempo();
-        g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString(cadenaTiempo, 30, 30);
 
     }
 
@@ -124,8 +108,8 @@ public class PantallaJuego implements Pantalla {
             redimension = img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         }
         rellenarFondo(g);
-        for (int i = 0; i < asteroides.size(); i++) {
-            asteroides.get(i).estampar(g);
+        for (int i = 0; i < bloques.size(); i++) {
+            bloques.get(i).estampar(g);
         }
         if (barra != null) {
             barra.estampar(g);
@@ -133,15 +117,8 @@ public class PantallaJuego implements Pantalla {
         if (bola != null) {
             bola.estampar(g);
         }
-        // rellenarTexto(g);
+
         rellenarPuntuacion(g);
-
-    }
-
-    /**
-     * Comprueba que el disparo ha salido del mapa
-     */
-    public void comprobarChoqueBarra() {
 
     }
 
@@ -182,38 +159,28 @@ public class PantallaJuego implements Pantalla {
     }
 
     /**
-     * Metodo que devuelve un String con el tiempo que se mostrara por pantalla
-     * 
-     * @return
-     */
-    private String calcularCadenaTiempo() {
-        tiempoTranscurrido = System.nanoTime();
-        tiempoActual = (tiempoTranscurrido - tiempoOriginal) / (10000000);// 10e9
-        contador = tiempoActual * 0.01;
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-        DecimalFormat df = new DecimalFormat("##.##", dfs);
-
-        return df.format(contador);
-    }
-
-    /**
      * Se ejecuta una vez cada 25 milisegundos y sera donde movamos y comprobemos
      * las colisiones del juego
      */
     @Override
     public void ejecutarFrame(int ancho, int alto) {
         if (bola != null) {
-            for (int i = 0; i < asteroides.size(); i++) {
-                if (comprobarChoque(bola, asteroides.get(i))) {
-                    if (bola.getPosX() + bola.getAncho() < asteroides.get(i).getPosX()) {
+            for (int i = 0; i < bloques.size(); i++) {
+                if (comprobarChoque(bola, bloques.get(i))) {
+                    // Comprobamos que da por un lado y no por arriba y por abajo , le doy 10
+                    // pixeles de margen para mejor funcionamiento
+                    if (bola.getPosX() + (bola.getAncho() / 2) < bloques.get(i).getPosX()
+                            && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
+                        System.out.println("Cambio izquierda");
                         bola.cambiarTrayectoriaX();
+                    } else if (bola.getPosX() > bloques.get(i).getPosX() + (bloques.get(i).getAncho() / 2)
+                            && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
+                        System.out.println("Cambio derecha");
+                        bola.cambiarTrayectoriaX();
+                    } else {
+                        bola.cambiarTrayectoriaY();
                     }
-                    if (bola.getPosX() > asteroides.get(i).getPosX() + asteroides.get(i).getAncho())
-                        bola.cambiarTrayectoriaX();
-                    asteroides.remove(i);
-
-                    bola.cambiarTrayectoriaY();
+                    bloques.remove(i);
                 }
 
             }
@@ -232,9 +199,9 @@ public class PantallaJuego implements Pantalla {
         } else {
             panel.setPantallaActual(new PantallaFinal(false, contador, panel));
         }
-        if (asteroides.size() > 0) {
-            for (int i = 0; i < asteroides.size(); i++) {
-                asteroides.get(i).mover(ancho, alto);
+        if (bloques.size() > 0) {
+            for (int i = 0; i < bloques.size(); i++) {
+                bloques.get(i).mover(ancho, alto);
             }
         } else if (bola != null) {
             panel.setPantallaActual(new PantallaFinal(true, contador, panel));
@@ -248,7 +215,7 @@ public class PantallaJuego implements Pantalla {
      */
     @Override
     public void hacerClick(MouseEvent e) {
-        if (SwingUtilities.isLeftMouseButton(e) && bola != null) {
+        if (SwingUtilities.isLeftMouseButton(e) && bola != null && bola.getVelX() == 0) {
             bola.setVelX(velocidadBola);
             bola.setVelY(velocidadBola);
         }
