@@ -130,7 +130,7 @@ public class Sprite {
     public void cambiarTrayectoriaY() {
         int rd = new Random().nextInt(5);
         velY = velY * -1;
-        if (rd == 1) {
+        if (rd == 1 && 5 < Math.abs(velY)) {
             velY += 1;
             velX = velX - 1;
         }
@@ -144,7 +144,7 @@ public class Sprite {
     public void cambiarTrayectoriaX() {
         int rd = new Random().nextInt(5);
         velX = velX * -1;
-        if (rd == 1) {
+        if (rd == 1 && Math.abs(velX) > 5) {
             velX += 1;
             velY = velY - 1;
         }

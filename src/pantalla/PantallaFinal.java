@@ -26,10 +26,7 @@ public class PantallaFinal implements Pantalla {
     private BufferedImage img;
     private boolean victoria;
     private String mensaje;
-    private String mensajeTiempo;
-    private double tiempo;
-    private DecimalFormat df;
-    private DecimalFormatSymbols dfs;
+
     private PanelJuego panel;
 
     /**
@@ -39,9 +36,8 @@ public class PantallaFinal implements Pantalla {
      * @param tiempo
      * @param panel
      */
-    public PantallaFinal(boolean victoria, double tiempo, PanelJuego panel) {
+    public PantallaFinal(boolean victoria, PanelJuego panel) {
         this.victoria = victoria;
-        this.tiempo = tiempo;
         inicializarPantalla();
         this.panel = panel;
     }

@@ -191,7 +191,6 @@ public class PantallaJuego implements Pantalla {
      */
     @Override
     public void ejecutarFrame(int ancho, int alto) {
-
         if (bola != null) {
             for (int i = 0; i < bloques.size(); i++) {
                 if (comprobarChoque(bola, bloques.get(i))) {
@@ -199,13 +198,14 @@ public class PantallaJuego implements Pantalla {
                     // pixeles de margen para mejor funcionamiento
                     if (bola.getPosX() + (bola.getAncho() / 2) < bloques.get(i).getPosX()
                             && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
-                        System.out.println("Cambio izquierda");
+
                         bola.cambiarTrayectoriaX();
                     } else if (bola.getPosX() > bloques.get(i).getPosX() + (bloques.get(i).getAncho() - 10)
                             && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
-                        System.out.println("Cambio derecha");
+
                         bola.cambiarTrayectoriaX();
                     } else {
+
                         bola.cambiarTrayectoriaY();
                     }
                     bloques.remove(i);
@@ -214,13 +214,12 @@ public class PantallaJuego implements Pantalla {
             }
             if (comprobarChoque(barra, bola)) {// Si chocan se cambia la velocidad en Y
                 bola.cambiarTrayectoriaY();
-
             }
 
             bola.mover(ancho, alto);
             if (bola.getPosY() > alto) {// Si la bola cae abajo perdemos
                 bola = null;
-                panel.setPantallaActual(new PantallaFinal(false, contador, panel));
+                panel.setPantallaActual(new PantallaFinal(false, panel));
             }
         }
         barra.mover(voidIzquierda, voyDerecha, panel.getWidth());
@@ -229,9 +228,8 @@ public class PantallaJuego implements Pantalla {
                 bloques.get(i).mover(ancho, alto);
             }
         } else if (bola != null) {// Si no hay bloques ganamos
-            panel.setPantallaActual(new PantallaFinal(true, contador, panel));
+            panel.setPantallaActual(new PantallaFinal(true, panel));
         }
-
     }
 
     /**
