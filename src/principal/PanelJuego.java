@@ -191,7 +191,7 @@ public class PanelJuego extends JPanel
 
     @Override
     public void keyReleased(KeyEvent e) {
-        pantallaActual.soltarTecla();
+        pantallaActual.soltarTecla(e);
 
     }
 

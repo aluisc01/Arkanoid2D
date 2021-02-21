@@ -26,6 +26,17 @@ public class Sprite {
 
     private BufferedImage buffer;
 
+    /**
+     * Constructor que usaremos para un sprite sin imagen
+     * 
+     * @param color
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param velX
+     * @param velY
+     */
     public Sprite(Color color, int x, int y, int width, int height, int velX, int velY) {
         this.color = color;
         this.posX = x;
@@ -34,23 +45,20 @@ public class Sprite {
         this.alto = height;
 
         inicializarBuffer();
-        // setVelocidadesAleatorias();
 
     }
 
-    public Sprite(Color color, int x, int y, int width, int height, int velX, int velY, boolean comprobar) {
-        this.color = color;
-        this.posX = x;
-        this.posY = y;
-        this.ancho = width;
-        this.alto = height;
-
-        inicializarBuffer();
-        // setVelocidadesAleatorias();
-        this.velY = velY;
-        this.velX = velX;
-    }
-
+    /**
+     * Constructor que usaremos para un sprite con imagen
+     * 
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param velX
+     * @param velY
+     * @param ruta
+     */
     public Sprite(int x, int y, int width, int height, int velX, int velY, String ruta) {
 
         this.posX = x;
@@ -60,23 +68,35 @@ public class Sprite {
         this.ruta = ruta;
         inicializarBuffer(this.ruta);
 
-        // setVelocidadesAleatorias();
     }
 
-    public void mover(boolean voyIzquierda, boolean voyDerecha) {
+    /**
+     * Metodo que recive dos booleanos que indican la direccion del sprite y nos
+     * moveremos horizontalmente sin salirnos
+     * 
+     * @param voyIzquierda
+     * @param voyDerecha
+     */
+    public void mover(boolean voyIzquierda, boolean voyDerecha, int anchoPanel) {
         velX = 15;
         if (voyIzquierda) {
             if (posX > 0) {
                 posX -= velX;
             }
         } else if (voyDerecha) {
-            if (posX + ancho < 590) {
+            if (posX + ancho < anchoPanel) {
                 posX += velX;
             }
         }
 
     }
 
+    /**
+     * Metodo que usaremos para mover un sprite segun su velocidad
+     * 
+     * @param anchoPanel
+     * @param altoPanel
+     */
     public void mover(int anchoPanel, int altoPanel) {
         posX += velX;
         posY += velY;
@@ -103,57 +123,30 @@ public class Sprite {
         posX += velX;
     }
 
-    public void setVelocidadesAleatorias() {
-        int nuevaVelX, nuevaVelY;
-        nuevaVelX = new Random().nextInt(5);
-
-        if (new Random().nextInt(2) == 0) {
-            nuevaVelX *= -nuevaVelX;
-        }
-
-        do {
-            nuevaVelY = new Random().nextInt(5);
-        } while (nuevaVelX == 0 && nuevaVelY == 0);
-
-        if (new Random().nextInt(2) == 0) {
-            nuevaVelY *= -1;
-        }
-
-        if (new Random().nextInt(2) == 0) {
-            velX = nuevaVelX;
-            velY = nuevaVelY;
-        } else {
-            velX = nuevaVelY;
-            velY = nuevaVelX;
-        }
-
-    }
-
+    /**
+     * Para que la bola cambie sus trayectorias vamos a ir sumando y restando 1 a la
+     * velocidad aleatoriamente , cambia de sentido la velocidad en Y
+     */
     public void cambiarTrayectoriaY() {
-        int rd = new Random().nextInt(3);
+        int rd = new Random().nextInt(5);
+        velY = velY * -1;
         if (rd == 1) {
-            velY = -(velY + 1);
+            velY += 1;
             velX = velX - 1;
-        } else if (rd == 2) {
-            velY = -(velY - 1);
-
-        } else {
-            velY = -velY;
         }
 
     }
 
+    /**
+     * Para que la bola cambie sus trayectorias vamos a ir sumando y restando 1 a la
+     * velocidad aleatoriamente , cambia de sentido la velocidad en X
+     */
     public void cambiarTrayectoriaX() {
-        int rd = new Random().nextInt(3);
+        int rd = new Random().nextInt(5);
+        velX = velX * -1;
         if (rd == 1) {
-            velX = -(velX + 1);
+            velX += 1;
             velY = velY - 1;
-        } else if (rd == 2) {
-            velX = -(velX - 1);
-            velY = velY + 1;
-
-        } else {
-            velX = -velX;
         }
     }
 
@@ -161,6 +154,9 @@ public class Sprite {
         this.posX = posX;
     }
 
+    /**
+     * Si es un sprite sin imagen inicializamos de esta manera
+     */
     public void inicializarBuffer() {
         buffer = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_ARGB);
         Graphics g = buffer.getGraphics();
@@ -169,6 +165,9 @@ public class Sprite {
         g.dispose();
     }
 
+    /**
+     * Si tenemos un sprite con imagen inicializamos la imagen y la rescalamos
+     */
     public void inicializarBuffer(String ruta) {
 
         try {
@@ -181,10 +180,16 @@ public class Sprite {
 
     }
 
+    /**
+     * Pinta el sprite en pantalla
+     * 
+     * @param g
+     */
     public void estampar(Graphics g) {
         g.drawImage(buffer.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH), posX, posY, null);
     }
 
+    // Getters y setters
     public Color getColor() {
         return this.color;
     }

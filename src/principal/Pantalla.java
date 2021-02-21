@@ -18,7 +18,7 @@ public interface Pantalla {
 
     public void pulsarTecla(KeyEvent e);
 
-    public void soltarTecla();
+    public void soltarTecla(KeyEvent e);
 
     public void redimensionarPantalla(ComponentEvent e, int ancho, int alto);
 }

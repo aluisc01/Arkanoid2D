@@ -35,7 +35,7 @@ public class PantallaJuego implements Pantalla {
 
     private File ruta = new File("Imagenes/fondo.png");
     private String rutaPelota = "Imagenes/nuevaPelota.png";
-    private String rutaBarra = "Imagenes/barra.png";
+    private String rutaBarra = "Imagenes/barra.gif";
 
     private double contador = 0.;
 
@@ -57,6 +57,13 @@ public class PantallaJuego implements Pantalla {
      */
     boolean voidIzquierda = false;
 
+    /**
+     * Contructor que recibe el panel donde se muestra y un entero indicando el
+     * nivel
+     * 
+     * @param panel
+     * @param nivel
+     */
     public PantallaJuego(PanelJuego panel, int nivel) {
 
         this.panel = panel;
@@ -134,7 +141,8 @@ public class PantallaJuego implements Pantalla {
     }
 
     /**
-     * Comprobamos si dos sprites que le mandemos chocan.
+     * Comprobamos si dos sprites que le mandemos chocan.Devuelve true si chocan y
+     * falso si no lo hacen
      * 
      * @param sprite1
      * @param sprite2
@@ -183,6 +191,7 @@ public class PantallaJuego implements Pantalla {
      */
     @Override
     public void ejecutarFrame(int ancho, int alto) {
+
         if (bola != null) {
             for (int i = 0; i < bloques.size(); i++) {
                 if (comprobarChoque(bola, bloques.get(i))) {
@@ -192,7 +201,7 @@ public class PantallaJuego implements Pantalla {
                             && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
                         System.out.println("Cambio izquierda");
                         bola.cambiarTrayectoriaX();
-                    } else if (bola.getPosX() > bloques.get(i).getPosX() + (bloques.get(i).getAncho() / 2)
+                    } else if (bola.getPosX() > bloques.get(i).getPosX() + (bloques.get(i).getAncho() - 10)
                             && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
                         System.out.println("Cambio derecha");
                         bola.cambiarTrayectoriaX();
@@ -203,10 +212,6 @@ public class PantallaJuego implements Pantalla {
                 }
 
             }
-        }
-        barra.mover(voidIzquierda, voyDerecha);
-
-        if (bola != null) {
             if (comprobarChoque(barra, bola)) {// Si chocan se cambia la velocidad en Y
                 bola.cambiarTrayectoriaY();
 
@@ -218,7 +223,7 @@ public class PantallaJuego implements Pantalla {
                 panel.setPantallaActual(new PantallaFinal(false, contador, panel));
             }
         }
-
+        barra.mover(voidIzquierda, voyDerecha, panel.getWidth());
         if (bloques.size() > 0) {
             for (int i = 0; i < bloques.size(); i++) {
                 bloques.get(i).mover(ancho, alto);
@@ -282,9 +287,15 @@ public class PantallaJuego implements Pantalla {
      * movernos
      */
     @Override
-    public void soltarTecla() {
-        voidIzquierda = false;
-        voyDerecha = false;
+    public void soltarTecla(KeyEvent e) {
+
+        char tecla = e.getKeyChar();
+        if (tecla == 'a') {
+            voidIzquierda = false;
+        }
+        if (tecla == 'd') {
+            voyDerecha = false;
+        }
 
     }
 }

@@ -53,11 +53,11 @@ public class PantallaFinal implements Pantalla {
     @Override
     public void inicializarPantalla() {
         if (victoria) {
-            fondoFile = "Imagenes/victoria.jpg";
-            mensaje = "Victoria!!";
+            fondoFile = "Imagenes/youwin.jpg";
+            mensaje = "";
         } else {
-            fondoFile = "Imagenes/derrota.jpg";
-            mensaje = "Has perdido!! :(";
+            fondoFile = "Imagenes/youlose.gif";
+            mensaje = "Haz click para volver a la pantalla de inicio";
         }
 
         img = null;
@@ -86,13 +86,13 @@ public class PantallaFinal implements Pantalla {
             g.setColor(Color.YELLOW);
             g.setFont(new Font("Arial", Font.BOLD, 60));
             g.drawString(mensaje, 200, 150);
-            g.setColor(Color.BLACK);
+            g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 25));
-            g.drawString("Para volver a jugar haz click ", 150, 200);
+            g.drawString("Para pasar al siguiente nivel haz click ", 70, 300);
         } else {
             g.setColor(Color.RED);
-            g.setFont(new Font("Arial", Font.BOLD, 50));
-            g.drawString(mensaje, 100, 250);
+            g.setFont(new Font("Arial", Font.BOLD, 24));
+            g.drawString(mensaje, 50, 290);
         }
 
     }
@@ -145,7 +145,7 @@ public class PantallaFinal implements Pantalla {
     }
 
     @Override
-    public void soltarTecla() {
+    public void soltarTecla(KeyEvent e) {
         // TODO Auto-generated method stub
 
     }

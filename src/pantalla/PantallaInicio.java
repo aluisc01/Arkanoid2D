@@ -44,7 +44,7 @@ public class PantallaInicio implements Pantalla {
         img = null;
 
         try {
-            img = ImageIO.read(new File("Imagenes/inicio.jpeg"));
+            img = ImageIO.read(new File("Imagenes/arkanoid.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,15 +60,8 @@ public class PantallaInicio implements Pantalla {
             redimension = img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         }
         g.drawImage(redimension, 0, 0, null);
-        g.setColor(Color.BLUE);
+        g.setColor(Color.GREEN);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Bienvenido a ArKanoid!!", 155, 200);
-
-        g.setColor(color);
-        g.drawLine(150, 210, 410, 210);
-        g.drawLine(150, 170, 410, 170);
-        g.drawLine(150, 210, 150, 170);
-        g.drawLine(410, 210, 410, 170);
 
         g.drawString("Haz Click para comenzar tu partida", 130, 300);
     }
@@ -110,11 +103,11 @@ public class PantallaInicio implements Pantalla {
 
     @Override
     public void pulsarTecla(KeyEvent e) {
-        System.out.println("tecla pulsada");
+
     }
 
     @Override
-    public void soltarTecla() {
+    public void soltarTecla(KeyEvent e) {
         // TODO Auto-generated method stub
 
     }
