@@ -26,6 +26,8 @@ public class Sprite {
 
     private BufferedImage buffer;
 
+    Image redimension;
+
     /**
      * Constructor que usaremos para un sprite sin imagen
      * 
@@ -137,6 +139,15 @@ public class Sprite {
 
     }
 
+    public void cambiarTrayectoriaYNegativa() {
+        int rd = new Random().nextInt(5);
+        velY = Math.abs(velY) * -1;
+        if (rd == 1 && 5 < Math.abs(velY)) {
+            velY -= 1;
+            velX = velX + 1;
+        }
+    }
+
     /**
      * Para que la bola cambie sus trayectorias vamos a ir sumando y restando 1 a la
      * velocidad aleatoriamente , cambia de sentido la velocidad en X
@@ -162,6 +173,7 @@ public class Sprite {
         Graphics g = buffer.getGraphics();
         g.setColor(color);
         g.fillRect(0, 0, ancho, alto);
+        redimension = buffer.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         g.dispose();
     }
 
@@ -176,7 +188,8 @@ public class Sprite {
             e.printStackTrace();
         }
         Graphics g = buffer.getGraphics();
-        g.drawImage(buffer.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH), 10, 10, null);
+        redimension = buffer.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        g.drawImage(redimension, 0, 0, null);
 
     }
 
@@ -186,7 +199,7 @@ public class Sprite {
      * @param g
      */
     public void estampar(Graphics g) {
-        g.drawImage(buffer.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH), posX, posY, null);
+        g.drawImage(redimension, posX, posY, null);
     }
 
     // Getters y setters

@@ -196,11 +196,11 @@ public class PantallaJuego implements Pantalla {
                 if (comprobarChoque(bola, bloques.get(i))) {
                     // Comprobamos que da por un lado y no por arriba y por abajo , le doy 10
                     // pixeles de margen para mejor funcionamiento
-                    if (bola.getPosX() + (bola.getAncho() / 2) < bloques.get(i).getPosX()
+                    if (bola.getPosX() + (bola.getAncho() * 0.8) < bloques.get(i).getPosX()
                             && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
 
                         bola.cambiarTrayectoriaX();
-                    } else if (bola.getPosX() > bloques.get(i).getPosX() + (bloques.get(i).getAncho() - 10)
+                    } else if (bola.getPosX() > bloques.get(i).getPosX() + (bloques.get(i).getAncho() * 0.95)
                             && bola.getPosY() < bloques.get(i).getPosY() + bloques.get(i).getAlto() - 10) {
 
                         bola.cambiarTrayectoriaX();
@@ -213,7 +213,7 @@ public class PantallaJuego implements Pantalla {
 
             }
             if (comprobarChoque(barra, bola)) {// Si chocan se cambia la velocidad en Y
-                bola.cambiarTrayectoriaY();
+                bola.cambiarTrayectoriaYNegativa();
             }
 
             bola.mover(ancho, alto);

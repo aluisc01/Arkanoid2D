@@ -7,8 +7,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import javax.imageio.ImageIO;
